@@ -4,43 +4,133 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wattleline — Never miss another job</title>
-<meta name="description" content="Wattleline answers the calls your trade business misses and turns them into booked jobs. All trades, Australia wide.">
+<meta name="description" content="Wattleline answers the calls your trade business misses and turns them into booked jobs. All trades, Australia wide. First 50 clients: no sign-up fee, first month free.">
 <style>
-  :root { --bg:#16181c; --panel:#1d2026; --text:#f2f3f1; --dim:#9aa0a8; --accent:#ffd21e; }
+  :root { --bg:#16181c; --panel:#1d2026; --line:#2a2e35; --text:#f2f3f1; --dim:#9aa0a8; --accent:#ffd21e; }
   * { margin:0; box-sizing:border-box; }
-  body { background:var(--bg); color:var(--text); font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,sans-serif;
-         min-height:100svh; display:grid; place-items:center; padding:24px; }
-  main { max-width:640px; }
-  .logo { font-size:1.5rem; font-weight:800; letter-spacing:-0.02em; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--bg); color:var(--text); font-family:ui-sans-serif,system-ui,'Segoe UI',Roboto,sans-serif; line-height:1.5; }
+  .wrap { max-width:960px; margin:0 auto; padding:0 24px; }
+  header { display:flex; align-items:center; justify-content:space-between; padding:24px 0; }
+  .logo { font-size:1.4rem; font-weight:800; letter-spacing:-0.02em; }
   .logo span { color:var(--accent); }
-  h1 { font-size:clamp(2.2rem,6vw,3.4rem); line-height:1.05; letter-spacing:-0.03em; margin:28px 0 20px;
-       text-wrap:balance; }
-  h1 em { font-style:normal; color:var(--accent); }
-  p.lede { color:var(--dim); font-size:1.125rem; line-height:1.6; max-width:52ch; }
-  .points { margin:32px 0; display:grid; gap:12px; }
-  .points div { background:var(--panel); border:1px solid #2a2e35; border-radius:10px; padding:14px 18px;
-                font-size:0.98rem; color:var(--text); }
-  .points b { color:var(--accent); font-weight:600; }
-  .soon { display:inline-block; margin-top:8px; padding:8px 14px; border:1px solid var(--accent);
-          border-radius:999px; color:var(--accent); font-size:0.85rem; letter-spacing:0.08em;
-          text-transform:uppercase; }
-  footer { margin-top:40px; color:var(--dim); font-size:0.85rem; }
+  nav a { color:var(--dim); text-decoration:none; margin-left:22px; font-size:0.95rem; }
+  nav a:hover { color:var(--text); }
+  .btn { display:inline-block; background:var(--accent); color:#16181c; border-radius:999px; padding:13px 26px;
+         font-weight:800; text-decoration:none; font-size:1.05rem; }
+  .btn.ghost { background:transparent; color:var(--accent); border:2px solid var(--accent); }
+  .hero { padding:64px 0 48px; }
+  .hero h1 { font-size:clamp(2.4rem,6vw,3.8rem); line-height:1.04; letter-spacing:-0.03em; text-wrap:balance; max-width:20ch; }
+  .hero h1 em { font-style:normal; color:var(--accent); }
+  .hero p { color:var(--dim); font-size:1.2rem; margin:24px 0 32px; max-width:54ch; }
+  .cta-row { display:flex; gap:14px; flex-wrap:wrap; }
+  .strip { background:var(--accent); color:#16181c; border-radius:14px; padding:18px 24px; margin:40px 0;
+           display:flex; gap:10px 28px; flex-wrap:wrap; align-items:center; font-weight:700; }
+  .strip .tag { font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; font-weight:800;
+                border:2px solid #16181c; border-radius:999px; padding:4px 12px; }
+  .strip s { opacity:0.55; }
+  section { padding:56px 0; border-top:1px solid var(--line); }
+  h2 { font-size:1.9rem; letter-spacing:-0.02em; margin-bottom:28px; }
+  h2 em { font-style:normal; color:var(--accent); }
+  .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; }
+  .step { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px; }
+  .step b { display:block; margin-bottom:8px; font-size:1.05rem; }
+  .step b i { font-style:normal; color:var(--accent); margin-right:8px; }
+  .step p { color:var(--dim); font-size:0.95rem; }
+  .price { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+  .plan { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:26px; }
+  .plan.founding { border-color:var(--accent); position:relative; }
+  .plan .name { font-weight:800; font-size:1.1rem; }
+  .plan .amt { font-size:2.2rem; font-weight:800; margin:12px 0 4px; }
+  .plan .amt small { font-size:1rem; color:var(--dim); font-weight:400; }
+  .plan ul { list-style:none; margin-top:14px; }
+  .plan li { padding:6px 0; color:var(--dim); font-size:0.97rem; }
+  .plan li::before { content:'— '; color:var(--accent); }
+  .badge { position:absolute; top:-13px; left:22px; background:var(--accent); color:#16181c; font-size:0.75rem;
+           font-weight:800; letter-spacing:0.1em; text-transform:uppercase; border-radius:999px; padding:4px 12px; }
+  .faq details { border-bottom:1px solid var(--line); padding:16px 0; }
+  .faq summary { cursor:pointer; font-weight:700; font-size:1.02rem; }
+  .faq p { color:var(--dim); margin-top:10px; max-width:64ch; }
+  footer { padding:40px 0 56px; color:var(--dim); font-size:0.85rem; border-top:1px solid var(--line); }
 </style>
 </head>
 <body>
-<main>
-  <div class="logo">Wattleline<span>.</span></div>
-  <h1>Every missed call is a job your competitor booked. <em>We answer all of them.</em></h1>
-  <p class="lede">Wattleline picks up when you can't — after hours, on the tools, on holiday — captures the job,
-  alerts you instantly to emergencies, and chases your quotes until they're answered.</p>
-  <div class="points">
-    <div><b>Every call answered</b> in your business name, around the clock</div>
-    <div><b>Emergencies texted to you</b> the moment the call ends</div>
-    <div><b>Quotes followed up</b> automatically until the job's won</div>
-    <div><b>All trades, Australia wide</b> — you keep your own number</div>
+<div class="wrap">
+  <header>
+    <div class="logo">Wattleline<span>.</span></div>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="demo.html">Live demo</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>Every missed call is a job your competitor booked. <em>We answer all of them.</em></h1>
+    <p>Wattleline picks up when you can't — after hours, on the tools, on holiday — in your business name.
+    The job gets captured, emergencies hit your phone in seconds, and your quotes get chased until they're won.</p>
+    <div class="cta-row">
+      <a class="btn" href="demo.html">Try it live — talk to it now</a>
+      <a class="btn ghost" href="Wattleline-Whitepaper.pdf">Read the white paper</a>
+    </div>
+    <div class="strip">
+      <span class="tag">First 50 only</span>
+      <span><s>$299</s> $0 sign-up</span><span>First month FREE</span>
+      <span>No lock-in contract</span><span>Free business website</span>
+    </div>
   </div>
-  <span class="soon">Founding 50 — opening soon</span>
-  <footer>© 2026 Wattleline · Sydney, Australia</footer>
-</main>
+
+  <section id="how">
+    <h2>You stay on the tools. <em>We run the phone.</em></h2>
+    <div class="steps">
+      <div class="step"><b><i>1</i>Every call answered</b><p>Around the clock, in your business name, by an assistant trained on your services and service area. You keep your own number.</p></div>
+      <div class="step"><b><i>2</i>Every job captured</b><p>Name, number, suburb, the job, how urgent. Logged consistently and visible in your dashboard within seconds of hangup.</p></div>
+      <div class="step"><b><i>3</i>Emergencies reach you fast</b><p>Burst pipe, gas smell, sparking wires — a text lands on your phone the moment the call ends, with everything you need to ring back.</p></div>
+      <div class="step"><b><i>4</i>Quotes chased until decided</b><p>Day 3, day 7, day 14 — polite follow-ups in your name, with opt-outs honoured to the letter. Jobs stop dying of silence.</p></div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <h2>One price. <em>No surprises.</em></h2>
+    <div class="price">
+      <div class="plan founding">
+        <div class="badge">Founding 50 — closing soon</div>
+        <div class="name">Founding client</div>
+        <div class="amt">$1,200<small>/month</small></div>
+        <ul>
+          <li><s>$299</s> $0 sign-up fee</li>
+          <li>First month completely free</li>
+          <li>No lock-in contract — leave any time</li>
+          <li>Free business website included</li>
+          <li>Founding rate locked while you stay</li>
+        </ul>
+      </div>
+      <div class="plan">
+        <div class="name">After the first 50</div>
+        <div class="amt">$1,800<small>/month</small></div>
+        <ul>
+          <li>$299 sign-up fee</li>
+          <li>Same service, standard rate</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <h2>Fair questions</h2>
+    <details><summary>Am I talking to a robot?</summary><p>When you call our line or the demo — yes, and that's the point: you're hearing exactly what your customers would get. Try to catch it out. Calls are answered naturally, emergencies get handled with real urgency, and callers get looked after instead of hitting voicemail.</p></details>
+    <details><summary>Do I keep my phone number?</summary><p>Yes. Nothing about your number or phone changes — missed and after-hours calls simply divert to us instead of ringing out.</p></details>
+    <details><summary>What if it doesn't work for my trade?</summary><p>All trades, Australia wide — plumbers, sparkies, roofers, locksmiths, glaziers, builders, HVAC and the rest. And with the first month free and no contract, the risk of finding out is zero.</p></details>
+    <details><summary>How fast is "emergencies in seconds"?</summary><p>The alert text is sent the moment the call ends — typically on your phone within about ten seconds, with the caller's name, suburb, problem and callback number.</p></details>
+  </section>
+
+  <section>
+    <h2>Hear it for yourself, <em>right now.</em></h2>
+    <p style="color:var(--dim); max-width:54ch; margin-bottom:24px;">No forms, no waiting. Open the live demo, ring the demo business as a customer, and watch the enquiry land. Ninety seconds, in your browser.</p>
+    <a class="btn" href="demo.html">Open the live demo</a>
+  </section>
+
+  <footer>© 2026 Wattleline · Sydney, Australia · All trades, Australia wide</footer>
+</div>
 </body>
 </html>
