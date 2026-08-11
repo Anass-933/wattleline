@@ -63,13 +63,54 @@
   console.log('[wattleline] Vapi client ready');
   let active = null; // button currently in a call
 
+  // Pre-flight mic check: grab the mic, listen for ~1.2s, report what we hear.
+  // Exists because mobile calls can connect one-way (assistant audible, caller
+  // silent) with no error — this makes the failure name itself.
+  async function micCheck(status) {
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err) {
+      status.textContent =
+        'Microphone blocked. Allow the mic for this site (padlock icon / browser settings) and try again.';
+      return false;
+    }
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      await ctx.resume();
+      const analyser = ctx.createAnalyser();
+      ctx.createMediaStreamSource(stream).connect(analyser);
+      const data = new Uint8Array(analyser.fftSize);
+      let peak = 0;
+      status.textContent = 'Mic check — say something…';
+      const end = Date.now() + 1200;
+      while (Date.now() < end) {
+        analyser.getByteTimeDomainData(data);
+        for (const v of data) peak = Math.max(peak, Math.abs(v - 128));
+        await new Promise((r) => setTimeout(r, 50));
+      }
+      ctx.close();
+      if (peak < 3) {
+        status.textContent =
+          "Mic is connected but we hear nothing — check your phone's mic isn't muted or held by another app, then try again.";
+        return false;
+      }
+      return true;
+    } catch {
+      return true; // analyser unsupported — don't block the call over the diagnostic
+    } finally {
+      stream.getTracks().forEach((t) => t.stop());
+    }
+  }
+
   function wire(btn, status) {
     const label = btn.textContent;
     btn.addEventListener('click', async () => {
       if (active === btn) { vapi.stop(); return; }
       if (active) return; // one call at a time
       btn.disabled = true;
-      status.textContent = 'Connecting…';
+      if (!(await micCheck(status))) { btn.disabled = false; return; }
+      status.textContent = 'Mic OK — connecting…';
       try {
         await vapi.start(btn.dataset.assistant);
         active = btn;
@@ -77,9 +118,14 @@
         btn.classList.add('stop');
         status.textContent = 'Live — say hello';
       } catch (err) {
+        console.error('[wattleline] start failed', err);
         status.textContent = 'Could not start the call — check mic permission and try again.';
       }
       btn.disabled = false;
+    });
+    vapi.on('error', (e) => {
+      console.error('[wattleline] vapi error', e);
+      if (active === btn) status.textContent = 'Call hit an error — hang up and try again.';
     });
     vapi.on('call-end', () => {
       if (active === btn) {
