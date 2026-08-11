@@ -25,5 +25,6 @@ header.writeUInt16LE(bits, 34);
 header.write('data', 36);
 header.writeUInt32LE(out.length, 40);
 
-writeFileSync('office-quiet.wav', Buffer.concat([header, out]));
-console.log('office-quiet.wav written at gain', GAIN);
+writeFileSync('office-keys-quiet.wav', Buffer.concat([header, out]));
+console.log('office-keys-quiet.wav written at gain', GAIN);
+
