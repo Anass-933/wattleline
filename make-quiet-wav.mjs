@@ -3,7 +3,8 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const GAIN = 0.7;
-const pcm = readFileSync('office-raw.pcm');
+const [inFile = 'office-raw.pcm', outFile = 'office-keys-quiet.wav'] = process.argv.slice(2);
+const pcm = readFileSync(inFile);
 const out = Buffer.alloc(pcm.length);
 for (let i = 0; i < pcm.length - 1; i += 2) {
   out.writeInt16LE(Math.round(pcm.readInt16LE(i) * GAIN), i);
@@ -25,6 +26,6 @@ header.writeUInt16LE(bits, 34);
 header.write('data', 36);
 header.writeUInt32LE(out.length, 40);
 
-writeFileSync('office-keys-quiet.wav', Buffer.concat([header, out]));
-console.log('office-keys-quiet.wav written at gain', GAIN);
+writeFileSync(outFile, Buffer.concat([header, out]));
+console.log(outFile, 'written at gain', GAIN);
 
