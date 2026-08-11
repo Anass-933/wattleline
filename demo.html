@@ -52,10 +52,15 @@
 </main>
 
 <script type="module">
-  import Vapi from 'https://cdn.jsdelivr.net/npm/@vapi-ai/web/+esm';
+  // esm.sh handles the CJS->ESM interop; jsdelivr's +esm wrapped the class so
+  // `default` wasn't the constructor. The ?? chain covers either shape.
+  import VapiImport from 'https://esm.sh/@vapi-ai/web';
+  const Vapi = VapiImport?.default ?? VapiImport;
+  console.log('[wattleline] Vapi loaded:', typeof Vapi);
 
   const PUBLIC_KEY = '1342f9be-642d-4581-bc60-5873bb132da0';
   const vapi = new Vapi(PUBLIC_KEY);
+  console.log('[wattleline] Vapi client ready');
   let active = null; // button currently in a call
 
   function wire(btn, status) {
