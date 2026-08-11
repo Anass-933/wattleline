@@ -1,0 +1,4 @@
+
+# Intermediates for the ambience loops; the committed .mp3 is the artefact
+*.wav
+*.pcm
